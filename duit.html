@@ -1,0 +1,1497 @@
+<!doctype html>
+<!--
+  ==================================================================
+  DUITDULU - ISI HALAMAN (duit.html)
+  ==================================================================
+  TIGA FILE: duit.html = isi halaman (teks, gambar, ikon)
+             duit.css  = tampilan (warna, ukuran, jarak)
+             duit.js   = logika & perhitungan
+  Buka website dengan klik dua kali duit.html (tanpa XAMPP/PHP).
+
+  DAFTAR ISI FILE INI (berurutan dari atas ke bawah)
+    1. DAFTAR IKON ........ semua ikon SVG (nama ikon yang bisa dipakai)
+    2. SIDEBAR ............ menu kiri + logo + nama aplikasi
+    3. BAGIAN ATAS ........ judul halaman, tanggal, nama pengguna
+    4. DASHBOARD
+    5. TAHAP 1 · DANA
+    6. TAHAP 2 · PENILAIAN
+    7. TAHAP 3 · HASIL SAW
+    8. TAHAP 4 · ALOKASI DANA
+    9. RIWAYAT
+   10. POPUP DETAIL RIWAYAT
+   11. POPUP PANDUAN SKOR (Selengkapnya)
+   12. FOOTER + NOTIFIKASI + SCRIPT
+
+  KATA KUNCI PENCARIAN  (Ctrl+F)
+    GANTI TEKS    tulisan yang boleh Anda ganti
+    GANTI NAMA    nama aplikasi / nama pengguna
+    GANTI GAMBAR  file gambar yang boleh Anda ganti
+    GANTI IKON    ikon yang boleh Anda ganti
+    JANGAN UBAH   id / data-... yang dipakai duit.js (kalau diubah, fitur rusak)
+    PENJELASAN    catatan untuk belajar cara kerja suatu bagian
+
+  CONTOH CEPAT
+    Ganti nama aplikasi : cari  DuitDulu  pada BAGIAN 2 (SIDEBAR), <title> di <head>, dan FOOTER.
+    Ganti nama pengguna : ubah  name  di duit.js (BAGIAN 1), bukan di file ini.
+    Ganti gambar        : ubah nama file pada  src="NAMA-FILE.png"  lalu simpan
+                          file gambarnya di folder .
+    Ganti ikon          : ubah nama setelah tanda # pada  <use href="#x-wallet" />  dengan nama
+                          ikon lain dari DAFTAR IKON (BAGIAN 1 file ini).
+
+  LAPTOP / DESKTOP vs HP
+    File ini SAMA untuk semua perangkat. Perbedaan tampilannya diatur duit.css (cari tanda [LAPTOP / DESKTOP]
+    dan [HP] di file itu). Yang berbeda di HP: sidebar menjadi menu geser (ada tombol menu), dan gambar judul
+    halaman disembunyikan. Komentar bertanda [HP] atau [LAPTOP / DESKTOP] di file ini menunjukkan bagian itu.
+
+  PETA GAMBAR YANG DIPAKAI SAAT INI
+    d aja.png ... logo sidebar (BAGIAN 2)
+    d aja.png ................. ikon tab browser (di <head>)
+    dompet.png .. banner Dashboard (BAGIAN 4)
+    papan.png ... judul Tahap 1 (BAGIAN 5)
+    grafik.png .. judul Tahap 2 (BAGIAN 6)
+    Tahap 3, Tahap 4, Riwayat . slot gambar masih kosong ("Ruang gambar"), cara memasang ada di
+                                komentar tiap bagian itu.
+    Gambar judul halaman disembunyikan otomatis di HP (aturan: duit.css BAGIAN 13).
+-->
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- GANTI WARNA: warna bilah browser di HP. Samakan dengan warna utama (hijau tua). -->
+    <meta name="theme-color" content="#087346" />
+    <!-- GANTI NAMA/TEKS: judul yang tampil di tab browser. -->
+    <title>DuitDulu — Alat Bantu Keputusan Keuangan</title>
+
+    <!--
+      FONT: huruf DM Sans diambil dari Google Fonts (butuh internet; tanpa internet browser memakai huruf bawaan).
+      GANTI FONT: ubah nama DM+Sans pada alamat di bawah DAN font-family pada body di duit.css (BAGIAN 1).
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FILE TAMPILAN: duit.css (disusun per BAGIAN, lihat daftar isinya di bagian atas file itu). -->
+    <link rel="stylesheet" href="duit.css" />
+    <link rel="stylesheet" href="duit-motion.css" />
+    <!-- GANTI GAMBAR: ikon kecil di tab browser. Ubah nama file "d aja.png" (file berada sefolder dengan duit.html). -->
+    <link rel="icon" type="image/png" href="d-aja.png" />
+  </head>
+
+  <!--
+    PENJELASAN: class="auth-pending" menyembunyikan halaman sampai JavaScript siap, lalu dihapus otomatis oleh
+    duit.js (BAGIAN 11). JANGAN UBAH.
+  -->
+  <body class="auth-pending">
+    <!--
+      ==================================================================
+      BAGIAN 1 · DAFTAR IKON (A: ikon sidebar & topbar)
+      ==================================================================
+      PENJELASAN: setiap ikon disimpan satu kali di sini sebagai <symbol id="NAMA">, lalu dipanggil di mana
+      saja dengan  <svg class="ico"><use href="#NAMA" /></svg>.
+      GANTI IKON DI TEMPAT PEMAKAIAN: ubah NAMA setelah tanda # (contoh: #x-wallet menjadi #x-coins).
+      GANTI BENTUK IKON: ubah garis/bentuk di dalam <symbol> bernama itu. Warna ikon mengikuti warna teks
+      sekitarnya (diatur CSS), jadi tidak perlu menulis warna di sini.
+      MENAMBAH IKON: salin satu blok <symbol id="..." viewBox="0 0 24 24">...</symbol>, beri id baru,
+      lalu panggil dengan <use href="#id-baru" />.
+      Ikon kebutuhan A1-A10 dipilih lewat NEED_META di duit.js (BAGIAN 1).
+      NAMA IKON TERSEDIA (awalan i-):
+      i-dashboard, i-input, i-analysis, i-result, i-allocation, i-history, i-menu,
+      i-chevron, i-logout
+    -->
+    <svg aria-hidden="true" width="0" height="0" style="position: absolute">
+      <symbol id="i-dashboard" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="8" rx="1" />
+        <rect x="14" y="3" width="7" height="5" rx="1" />
+        <rect x="14" y="11" width="7" height="10" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+      </symbol>
+      <symbol id="i-input" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 8v8M8 12h8" />
+      </symbol>
+      <symbol id="i-analysis" viewBox="0 0 24 24">
+        <path d="m4 12 4 4L20 4" />
+        <path d="M20 12v7H4V5h10" />
+      </symbol>
+      <symbol id="i-result" viewBox="0 0 24 24">
+        <path d="M3 3v18h18" />
+        <path d="M8 16v-4M13 16V7M18 16v-7" />
+      </symbol>
+      <symbol id="i-allocation" viewBox="0 0 24 24">
+        <path d="M12 2v10h10" />
+        <path d="M20.5 15A9 9 0 1 1 9 3" />
+      </symbol>
+      <symbol id="i-history" viewBox="0 0 24 24">
+        <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+        <path d="M3 3v5h5M12 7v5l3 2" />
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24">
+        <path d="m9 18 6-6-6-6" />
+      </symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24">
+        <path d="M10 17l5-5-5-5M15 12H3" />
+        <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" />
+      </symbol>
+    </svg>
+
+    <div class="app-shell">
+      <!--
+        ==================================================================
+        BAGIAN 2 · SIDEBAR (menu di sisi kiri; di HP menjadi menu geser)
+        ==================================================================
+        Perilaku: duit.js BAGIAN 4 (NAVIGASI)    Tampilan: duit.css BAGIAN 2
+      -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <!--
+            LOGO & NAMA APLIKASI
+            GANTI GAMBAR : ubah nama file pada src="d-aja.png" (simpan logo baru di ).
+            GANTI NAMA   : ubah tulisan DuitDulu di <strong>...</strong>, dan slogan di <small>...</small>.
+                           Nama aplikasi juga ada di <title> (bagian <head>) dan di FOOTER.
+            JANGAN UBAH  : data-page="dashboard" (membuat logo membuka Dashboard).
+          -->
+          <a href="#" class="brand" data-page="dashboard">
+            <img
+              src="d-aja.png"
+              alt="Logo DuitDulu"
+              class="brand-logo"
+            />
+            <span class="brand-text">
+              <strong>DuitDulu</strong>
+              <small>Alat bantu keputusan</small>
+            </span>
+          </a>
+
+          <!--
+            [LAPTOP / DESKTOP] TOMBOL PANAH untuk memperkecil/memperbesar sidebar.
+            GANTI IKON : ubah nama setelah # pada <use href="#i-chevron" />.
+            JANGAN UBAH: id="collapseToggle". aria-label hanya teks untuk pembaca layar.
+          -->
+          <button
+            class="icon-toggle collapse-btn"
+            id="collapseToggle"
+            type="button"
+            aria-label="Perkecil sidebar"
+            aria-expanded="true"
+          >
+            <svg class="ico"><use href="#i-chevron" /></svg>
+          </button>
+        </div>
+
+        <!-- GANTI TEKS: judul kelompok menu. -->
+        <div class="sidebar-caption">MENU UTAMA</div>
+
+        <!--
+          DAFTAR MENU. Tiap tombol = satu menu.
+          GANTI TEKS : ubah tulisan di dalam <span class="nav-label">...</span>.
+          GANTI IKON : ubah nama setelah # pada <use href="#i-dashboard" /> dst. (daftar nama: BAGIAN 1).
+          JANGAN UBAH: data-page="..." harus sama dengan id halaman (data-page="input" membuka id="page-input").
+          MENAMBAH MENU BARU: lihat PANDUAN di duit.js BAGIAN 4 (NAVIGASI).
+        -->
+        <nav class="nav-list">
+          <button class="nav-item active" data-page="dashboard" type="button">
+            <svg class="ico"><use href="#i-dashboard" /></svg>
+            <span class="nav-label">Dashboard</span>
+          </button>
+
+          <button class="nav-item" data-page="input" type="button">
+            <svg class="ico"><use href="#i-input" /></svg>
+            <span class="nav-label">Tahap 1 · Dana</span>
+          </button>
+
+          <button class="nav-item" data-page="analysis" type="button">
+            <svg class="ico"><use href="#i-analysis" /></svg>
+            <span class="nav-label">Tahap 2 · Penilaian</span>
+          </button>
+
+          <button class="nav-item" data-page="results" type="button">
+            <svg class="ico"><use href="#i-result" /></svg>
+            <span class="nav-label">Tahap 3 · Hasil</span>
+          </button>
+
+          <button class="nav-item" data-page="allocation" type="button">
+            <svg class="ico"><use href="#i-allocation" /></svg>
+            <span class="nav-label">Tahap 4 · Alokasi</span>
+          </button>
+
+          <button class="nav-item" data-page="history" type="button">
+            <svg class="ico"><use href="#i-history" /></svg>
+            <span class="nav-label">Riwayat</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <button class="nav-item logout" id="logoutBtn" type="button">
+            <svg class="ico"><use href="#i-logout" /></svg>
+            <span class="nav-label">Keluar</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Lapisan gelap di belakang menu geser (hanya di HP). JANGAN UBAH id="scrim". -->
+      <div class="scrim" id="scrim"></div>
+
+      <!--
+        AREA UTAMA (di kanan sidebar). Urutan isinya dari atas ke bawah:
+        bagian atas (topbar) -> Dashboard -> Tahap 1 -> Tahap 2 -> Tahap 3 -> Tahap 4 -> Riwayat -> popup -> footer.
+        Hanya satu halaman yang tampil pada satu waktu (class="page active"); duit.js yang berpindah-pindah.
+      -->
+      <main class="main-area">
+        <!--
+          ==================================================================
+          BAGIAN 3 · BAGIAN ATAS (judul halaman, tanggal, nama pengguna)
+          ==================================================================
+          GANTI TEKS : judul & sub-judul di bawah ("Ringkasan keuangan", "Dashboard") hanya isi awal; yang tampil
+                        saat berpindah halaman diatur oleh titles dan labels di duit.js (BAGIAN 4).
+          GANTI NAMA : nama pengguna & huruf di lingkaran avatar diisi otomatis dari  user.name  di duit.js (BAGIAN 1).
+          Tanggal terisi otomatis.
+          JANGAN UBAH: id (topEyebrow, pageTitle, todayLabel, userAvatar, userName).
+        -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <!--
+              [HP] TOMBOL MENU (hanya tampil di HP) untuk membuka sidebar geser.
+              GANTI IKON : ubah nama setelah # pada <use href="#i-menu" />. JANGAN UBAH id="menuToggle".
+            -->
+            <button
+              class="icon-toggle mobile-menu"
+              id="menuToggle"
+              type="button"
+              aria-label="Buka menu"
+              aria-expanded="false"
+            >
+              <svg class="ico"><use href="#i-menu" /></svg>
+            </button>
+            <div>
+              <div class="top-eyebrow" id="topEyebrow">Ringkasan keuangan</div>
+              <h1 id="pageTitle">Dashboard</h1>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <span class="today" id="todayLabel"></span>
+            <div class="user-profile">
+              <div class="avatar" id="userAvatar">U</div>
+              <span class="user-name" id="userName">Pengguna</span>
+            </div>
+          </div>
+        </header>
+
+        <!--
+          ==================================================================
+          BAGIAN 4 · DASHBOARD
+          ==================================================================
+          Perilaku: duit.js BAGIAN 5    Tampilan: duit.css BAGIAN 4
+        -->
+        <section class="page active" id="page-dashboard">
+          <!--
+            SAPAAN
+            GANTI TEKS : "SELAMAT DATANG KEMBALI", kata "Halo," dan kalimat pada <p>.
+            GANTI NAMA : kata "Pengguna" di dalam <span id="greetingName"> diganti otomatis oleh JavaScript.
+                          Untuk mengganti namanya, ubah  name  di duit.js (BAGIAN 1 · user), BUKAN di sini.
+            JANGAN UBAH: id="greetingName".
+          -->
+          <div class="dashboard-greeting">
+            <div>
+              <p class="eyebrow">SELAMAT DATANG KEMBALI</p>
+              <h2>Halo, <span id="greetingName">Pengguna</span>!</h2>
+              <p>Atur kebutuhanmu hari ini dengan lebih terencana.</p>
+            </div>
+            <!-- HIASAN: karakter ✦ adalah teks biasa (bukan gambar). GANTI IKON: ganti karakternya dengan karakter lain. -->
+            <div class="greeting-mark">✦</div>
+          </div>
+
+          <!--
+            BANNER TOTAL DANA. Angka total dana terisi otomatis dari isian Tahap 1.
+            GANTI TEKS : "Total dana yang kamu kelola", kalimat di <small>, dan tulisan tombol.
+            JANGAN UBAH: id="dashTotal".
+          -->
+          <section class="money-banner">
+            <div class="banner-image-slot image-slot">
+              <!--
+                GANTI GAMBAR : ubah nama file pada src="dompet.png" (simpan gambar di ).
+                PENJELASAN   : alt = teks pengganti bila gambar gagal dimuat.
+                               onerror = bila file gambar tidak ditemukan, gambar disembunyikan otomatis (tidak muncul ikon rusak).
+              -->
+              <img
+                src="dompet.png"
+                alt="Ilustrasi dompet"
+                onerror="this.style.display = 'none'"
+              />
+            </div>
+            <div class="banner-money">
+              <span>Total dana yang kamu kelola</span>
+              <strong id="dashTotal">Rp0</strong>
+              <small>Kelola dana dengan menentukan prioritas kebutuhan.</small>
+            </div>
+            <!--
+              TOMBOL. GANTI TEKS: tulisan tombol ("Mulai analisis").
+              PENJELASAN : data-go="input" = membuka Tahap 1. Nilai data-go = nama halaman:
+                           dashboard, input, analysis, results, allocation, history.
+              JANGAN UBAH: data-go kecuali ingin mengubah tujuan tombol.
+            -->
+            <button class="btn btn-primary" data-go="input" type="button">
+              Mulai analisis <span>→</span>
+            </button>
+          </section>
+
+          <!--
+            TIGA KARTU RINGKASAN (dana cadangan, dana operasional, kebutuhan dipilih). Angkanya terisi otomatis.
+            GANTI TEKS : judul kartu di dalam <span>.
+            GANTI IKON : ikon kartu BUKAN gambar SVG, melainkan karakter teks di dalam <div class="stat-icon ...">:
+                          "Rp", "↗", "▦". Ganti karakternya, atau isi dengan ikon SVG:
+                          <svg class="ico"><use href="#x-wallet" /></svg>  (nama ikon: BAGIAN 1).
+            GANTI WARNA IKON: kelas green-icon / amber-icon / purple-icon (duit.css BAGIAN 4).
+            JANGAN UBAH: id (dashReserve, dashOperating, dashCount).
+          -->
+          <div class="dashboard-stats">
+            <article class="stat-card">
+              <div class="stat-icon green-icon">Rp</div>
+              <div>
+                <span>Dana cadangan</span>
+                <strong id="dashReserve">Rp0</strong>
+              </div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-icon amber-icon">↗</div>
+              <div>
+                <span>Dana operasional</span>
+                <strong id="dashOperating">Rp0</strong>
+              </div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-icon purple-icon">▦</div>
+              <div>
+                <span>Kebutuhan dipilih</span>
+                <strong id="dashCount">0 kebutuhan</strong>
+              </div>
+            </article>
+          </div>
+
+          <!-- DUA PANEL: grafik donat (kiri) dan langkah penggunaan (kanan). -->
+          <div class="dashboard-redesign">
+            <!--
+              GRAFIK DONAT. Bentuk donat dan angkanya digambar/diisi oleh duit.js (BAGIAN 5 · DASHBOARD).
+              GANTI TEKS : "RINGKASAN", "Gambaran alokasi dana", "Keuangan", "Terpakai", "Dana operasional",
+                            "Dana cadangan", dan kalimat petunjuk di bawah donat.
+              JANGAN UBAH: id (dashboardDonut, dashboardDonutPercent, dashboardLegendFirstValue,
+                            dashboardLegendReserve, dashboardAllocationHint).
+            -->
+            <article class="panel allocation-donut-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">RINGKASAN</p>
+                  <h3>Gambaran alokasi dana</h3>
+                </div>
+                <span class="soft-badge">Keuangan</span>
+              </div>
+
+              <div class="allocation-visual">
+                <div class="dashboard-donut" id="dashboardDonut">
+                  <div class="dashboard-donut-center">
+                    <strong id="dashboardDonutPercent">0%</strong>
+                    <span>Terpakai</span>
+                  </div>
+                </div>
+
+                <div class="dashboard-legend">
+                  <div>
+                    <i class="dot-first"></i>
+                    <span>Dana operasional</span>
+                    <b id="dashboardLegendFirstValue">Rp0</b>
+                  </div>
+                  <div>
+                    <i class="dot-reserve"></i>
+                    <span>Dana cadangan</span>
+                    <b id="dashboardLegendReserve">Rp0</b>
+                  </div>
+                </div>
+              </div>
+              <p class="muted small" id="dashboardAllocationHint">
+                Masukkan dana untuk melihat ringkasan alokasi.
+              </p>
+            </article>
+
+            <!--
+              LANGKAH PENGGUNAAN.
+              GANTI TEKS : "ALUR PENGGUNAAN", "Langkah sederhana", dan nama tiap langkah.
+              GANTI IKON : angka 01/02/03 di dalam <div class="quick-flow-icon"> adalah teks biasa; boleh diganti.
+            -->
+            <article class="panel quick-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">ALUR PENGGUNAAN</p>
+                  <h3>Langkah sederhana</h3>
+                </div>
+              </div>
+
+              <div class="quick-flow">
+                <div class="quick-flow-item">
+                  <div class="quick-flow-icon">01</div>
+                  <span>Input dana</span>
+                </div>
+                <div class="quick-flow-line"></div>
+                <div class="quick-flow-item">
+                  <div class="quick-flow-icon">02</div>
+                  <span>Nilai kebutuhan</span>
+                </div>
+                <div class="quick-flow-line"></div>
+                <div class="quick-flow-item">
+                  <div class="quick-flow-icon final-icon">03</div>
+                  <span>Lihat hasil</span>
+                </div>
+              </div>
+
+              <!-- TOMBOL. GANTI TEKS: tulisan tombol. JANGAN UBAH data-go="input" (membuka Tahap 1). -->
+              <button
+                class="btn btn-primary quick-action"
+                data-go="input"
+                type="button"
+              >
+                Mulai sekarang <span>→</span>
+              </button>
+            </article>
+          </div>
+        </section>
+
+        <!--
+          ==================================================================
+          BAGIAN 1 · DAFTAR IKON (B: ikon halaman Tahap 1-4, Riwayat, popup)
+          ==================================================================
+          PENJELASAN: setiap ikon disimpan satu kali di sini sebagai <symbol id="NAMA">, lalu dipanggil di mana
+          saja dengan  <svg class="ico"><use href="#NAMA" /></svg>.
+          GANTI IKON DI TEMPAT PEMAKAIAN: ubah NAMA setelah tanda # (contoh: #x-wallet menjadi #x-coins).
+          GANTI BENTUK IKON: ubah garis/bentuk di dalam <symbol> bernama itu. Warna ikon mengikuti warna teks
+          sekitarnya (diatur CSS), jadi tidak perlu menulis warna di sini.
+          MENAMBAH IKON: salin satu blok <symbol id="..." viewBox="0 0 24 24">...</symbol>, beri id baru,
+          lalu panggil dengan <use href="#id-baru" />.
+          Ikon kebutuhan A1-A10 dipilih lewat NEED_META di duit.js (BAGIAN 1).
+          NAMA IKON TERSEDIA (awalan x-):
+          x-arrow-left, x-wallet, x-coins, x-piggy, x-calculator, x-grid, x-circle-check,
+          x-check, x-utensils, x-house, x-car, x-graduation, x-heart-pulse, x-smartphone,
+          x-file-text, x-sparkles, x-gamepad, x-star, x-bars, x-clock, x-credit-card,
+          x-target, x-scale, x-layers, x-trophy, x-list, x-pie, x-bulb, x-search, x-calendar,
+          x-eye, x-trash, x-chevron-left, x-chevron-right, x-chevron-down, x-x, x-info,
+          x-refresh
+        -->
+        <svg aria-hidden="true" width="0" height="0" style="position: absolute">
+          <symbol id="x-arrow-left" viewBox="0 0 24 24">
+            <path d="m12 19-7-7 7-7" />
+            <path d="M19 12H5" />
+          </symbol>
+          <symbol id="x-wallet" viewBox="0 0 24 24">
+            <path
+              d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"
+            />
+            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+          </symbol>
+          <symbol id="x-coins" viewBox="0 0 24 24">
+            <circle cx="8" cy="8" r="6" />
+            <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
+            <path d="M7 6h1v4" />
+            <path d="m16.71 13.88.7.71-2.82 2.82" />
+          </symbol>
+          <symbol id="x-piggy" viewBox="0 0 24 24">
+            <path
+              d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"
+            />
+            <path d="M2 9v1c0 1.1.9 2 2 2h1" />
+            <path d="M16 11h.01" />
+          </symbol>
+          <symbol id="x-calculator" viewBox="0 0 24 24">
+            <rect width="16" height="20" x="4" y="2" rx="2" />
+            <line x1="8" x2="16" y1="6" y2="6" />
+            <line x1="16" x2="16" y1="14" y2="18" />
+            <path
+              d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"
+            />
+          </symbol>
+          <symbol id="x-grid" viewBox="0 0 24 24">
+            <rect width="7" height="7" x="3" y="3" rx="1" />
+            <rect width="7" height="7" x="14" y="3" rx="1" />
+            <rect width="7" height="7" x="14" y="14" rx="1" />
+            <rect width="7" height="7" x="3" y="14" rx="1" />
+          </symbol>
+          <symbol id="x-circle-check" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
+          </symbol>
+          <symbol id="x-check" viewBox="0 0 24 24">
+            <path d="M20 6 9 17l-5-5" />
+          </symbol>
+          <symbol id="x-utensils" viewBox="0 0 24 24">
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+            <path d="M7 2v20" />
+            <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+          </symbol>
+          <symbol id="x-house" viewBox="0 0 24 24">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+            <path
+              d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+            />
+          </symbol>
+          <symbol id="x-car" viewBox="0 0 24 24">
+            <path
+              d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"
+            />
+            <circle cx="7" cy="17" r="2" />
+            <path d="M9 17h6" />
+            <circle cx="17" cy="17" r="2" />
+          </symbol>
+          <symbol id="x-graduation" viewBox="0 0 24 24">
+            <path
+              d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+            />
+            <path d="M22 10v6" />
+            <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+          </symbol>
+          <symbol id="x-heart-pulse" viewBox="0 0 24 24">
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+            <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" />
+          </symbol>
+          <symbol id="x-smartphone" viewBox="0 0 24 24">
+            <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+            <path d="M12 18h.01" />
+          </symbol>
+          <symbol id="x-file-text" viewBox="0 0 24 24">
+            <path
+              d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+            />
+            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+            <path d="M10 9H8M16 13H8M16 17H8" />
+          </symbol>
+          <symbol id="x-sparkles" viewBox="0 0 24 24">
+            <path
+              d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"
+            />
+            <path d="M20 3v4M22 5h-4M4 17v2M5 18H3" />
+          </symbol>
+          <symbol id="x-gamepad" viewBox="0 0 24 24">
+            <line x1="6" x2="10" y1="11" y2="11" />
+            <line x1="8" x2="8" y1="9" y2="13" />
+            <line x1="15" x2="15.01" y1="12" y2="12" />
+            <line x1="18" x2="18.01" y1="10" y2="10" />
+            <path
+              d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"
+            />
+          </symbol>
+          <symbol id="x-star" viewBox="0 0 24 24">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            />
+          </symbol>
+          <symbol id="x-bars" viewBox="0 0 24 24">
+            <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+            <path d="M18 17V9M13 17V5M8 17v-3" />
+          </symbol>
+          <symbol id="x-clock" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </symbol>
+          <symbol id="x-credit-card" viewBox="0 0 24 24">
+            <rect width="20" height="14" x="2" y="5" rx="2" />
+            <line x1="2" x2="22" y1="10" y2="10" />
+          </symbol>
+          <symbol id="x-target" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </symbol>
+          <symbol id="x-scale" viewBox="0 0 24 24">
+            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+            <path d="M7 21h10M12 3v18" />
+            <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+          </symbol>
+          <symbol id="x-layers" viewBox="0 0 24 24">
+            <path
+              d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"
+            />
+            <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
+            <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
+          </symbol>
+          <symbol id="x-trophy" viewBox="0 0 24 24">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+            <path d="M4 22h16" />
+            <path
+              d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+            />
+            <path
+              d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+            />
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+          </symbol>
+          <symbol id="x-list" viewBox="0 0 24 24">
+            <path d="M3 12h.01M3 18h.01M3 6h.01M8 12h13M8 18h13M8 6h13" />
+          </symbol>
+          <symbol id="x-pie" viewBox="0 0 24 24">
+            <path
+              d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"
+            />
+            <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+          </symbol>
+          <symbol id="x-bulb" viewBox="0 0 24 24">
+            <path
+              d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"
+            />
+            <path d="M9 18h6M10 22h4" />
+          </symbol>
+          <symbol id="x-search" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </symbol>
+          <symbol id="x-calendar" viewBox="0 0 24 24">
+            <path d="M8 2v4M16 2v4" />
+            <rect width="18" height="18" x="3" y="4" rx="2" />
+            <path d="M3 10h18" />
+          </symbol>
+          <symbol id="x-eye" viewBox="0 0 24 24">
+            <path
+              d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+            />
+            <circle cx="12" cy="12" r="3" />
+          </symbol>
+          <symbol id="x-trash" viewBox="0 0 24 24">
+            <path d="M3 6h18" />
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+            <line x1="10" x2="10" y1="11" y2="17" />
+            <line x1="14" x2="14" y1="11" y2="17" />
+          </symbol>
+          <symbol id="x-chevron-left" viewBox="0 0 24 24">
+            <path d="m15 18-6-6 6-6" />
+          </symbol>
+          <symbol id="x-chevron-right" viewBox="0 0 24 24">
+            <path d="m9 18 6-6-6-6" />
+          </symbol>
+          <symbol id="x-chevron-down" viewBox="0 0 24 24">
+            <path d="m6 9 6 6 6-6" />
+          </symbol>
+          <symbol id="x-x" viewBox="0 0 24 24">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </symbol>
+          <symbol id="x-info" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+          </symbol>
+          <symbol id="x-refresh" viewBox="0 0 24 24">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+            <path d="M8 16H3v5" />
+          </symbol>
+        </svg>
+
+        <!--
+          ==================================================================
+          BAGIAN 5 · TAHAP 1 · DANA
+          ==================================================================
+          Perilaku: duit.js BAGIAN 6    Tampilan: duit.css BAGIAN 7
+        -->
+        <section class="page" id="page-input">
+          <!--
+            JUDUL HALAMAN (hero).
+            GANTI TEKS : tulisan tombol kembali di <span>, judul di <h2>, dan kalimat di <p>.
+                          Kata di dalam <span class="rd-underline"> diberi garis bawah hijau.
+            JANGAN UBAH: data-go="..." pada tombol kembali (tujuan tombol).
+          -->
+          <div class="rd-hero rd-rise" style="--i: 0">
+            <div class="rd-hero-text">
+              <button class="rd-back" type="button" data-go="dashboard">
+                <svg class="ico"><use href="#x-arrow-left" /></svg>
+                <span>Tahap 1 dari 4 · Dana</span>
+              </button>
+              <h2>
+                Atur dana &amp; pilih
+                <span class="rd-underline">kebutuhan</span>
+              </h2>
+              <p>
+                Masukkan dana yang tersedia, tentukan dana cadangan, lalu pilih
+                kebutuhan yang ingin dianalisis.
+              </p>
+            </div>
+            <div class="rd-art">
+              <!--
+                GANTI GAMBAR : ubah nama file pada src="papan.png" (simpan gambar baru di ).
+                PENJELASAN   : [LAPTOP / DESKTOP] gambar ini tampil. Ukuran slotnya: duit.css BAGIAN 6 (.rd-art).
+                               [HP] (lebar layar 760px ke bawah) gambar ini DISEMBUNYIKAN otomatis; aturannya di duit.css BAGIAN 13.
+              -->
+              <img src="1.png" alt="Ilustrasi" />
+            </div>
+          </div>
+
+          <div class="rd-split rd-split-1">
+            <!--
+              KARTU "DANA ANDA": isian total dana dan dana cadangan.
+              GANTI TEKS : judul kartu di <h3>. GANTI IKON: ikon di <span class="rd-card-ico"> dan di tiap isian
+                            (ubah nama setelah # pada <use href="#x-wallet" />, daftar nama: BAGIAN 1).
+              JANGAN UBAH: id="totalFunds", "reserveFunds", "operatingPreview", "useSuggestion".
+            -->
+            <article class="rd-card rd-rise" style="--i: 1">
+              <header class="rd-card-head">
+                <span class="rd-card-ico"
+                  ><svg class="ico"><use href="#x-wallet" /></svg>
+                </span>
+                <h3>Dana Anda</h3>
+              </header>
+
+              <div class="rd-field">
+                <span class="rd-field-ico amber"
+                  ><svg class="ico"><use href="#x-coins" /></svg>
+                </span>
+                <div class="rd-field-body">
+                  <!--
+                    GANTI TEKS : tulisan label. placeholder="Contoh: ..." (di bawah) = contoh angka abu-abu di kotak isian.
+                    PENJELASAN : type="number" membuat kotak hanya menerima angka; step="1000" = naik/turun per 1.000.
+                  -->
+                  <label for="totalFunds">Total dana tersedia <i>*</i></label>
+                  <div class="rd-money">
+                    <span>Rp</span>
+                    <input
+                      id="totalFunds"
+                      type="number"
+                      min="0"
+                      step="1000"
+                      placeholder="Contoh: 1500000"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="rd-field">
+                <span class="rd-field-ico amber"
+                  ><svg class="ico"><use href="#x-piggy" /></svg>
+                </span>
+                <div class="rd-field-body">
+                  <label for="reserveFunds">Dana cadangan <i>*</i></label>
+                  <div class="rd-money">
+                    <span>Rp</span>
+                    <input
+                      id="reserveFunds"
+                      type="number"
+                      min="0"
+                      step="1000"
+                      placeholder="Contoh: 150000"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!--
+                SARAN DANA CADANGAN. GANTI TEKS: "Saran: 10% dari total dana." dan tulisan tombol.
+                Jika persentase diganti, ubah juga angka 0.1 pada tombol useSuggestion di duit.js (BAGIAN 6 · Tahap 1).
+              -->
+              <div class="rd-suggest">
+                <span>Saran: 10% dari total dana.</span>
+                <button class="text-button" id="useSuggestion" type="button">
+                  Gunakan saran
+                </button>
+              </div>
+
+              <div class="rd-operating">
+                <span class="rd-field-ico"
+                  ><svg class="ico"><use href="#x-calculator" /></svg>
+                </span>
+                <div class="rd-field-body">
+                  <span class="rd-op-label">Dana operasional</span>
+                  <strong id="operatingPreview">Rp0</strong>
+                </div>
+              </div>
+            </article>
+
+            <!--
+              KARTU "PILIH KEBUTUHAN". Kotak kebutuhan A1-A10 dibuat otomatis oleh duit.js dari daftar ALTERNATIVES
+              (duit.js BAGIAN 1); jangan diisi manual di sini.
+              GANTI TEKS : judul kartu dan kalimat petunjuk. JANGAN UBAH: id="alternativeGrid" dan id="selectedCount".
+            -->
+            <article class="rd-card rd-rise" style="--i: 2">
+              <header class="rd-card-head">
+                <span class="rd-card-ico"
+                  ><svg class="ico"><use href="#x-grid" /></svg>
+                </span>
+                <h3>Pilih Kebutuhan</h3>
+                <span class="rd-pill"
+                  ><svg class="ico"><use href="#x-circle-check" /></svg>
+                  <b id="selectedCount">0 dipilih</b>
+                </span>
+              </header>
+              <p class="rd-hint">
+                Pilih satu atau lebih kebutuhan yang sesuai dengan kondisi
+                keuanganmu.
+              </p>
+              <div class="rd-need-grid" id="alternativeGrid"></div>
+            </article>
+          </div>
+
+          <!-- TOMBOL LANJUT. GANTI TEKS: tulisan di kiri dan di tombol. JANGAN UBAH id="toAnalysis". -->
+          <div class="form-actions rd-rise" style="--i: 3">
+            <span class="muted small"
+              >Pastikan data dana sudah benar sebelum melanjutkan.</span
+            >
+            <button class="btn btn-primary" id="toAnalysis" type="button">
+              Lanjut ke penilaian <span>→</span>
+            </button>
+          </div>
+        </section>
+
+        <!--
+          ==================================================================
+          BAGIAN 6 · TAHAP 2 · PENILAIAN (SAW)
+          ==================================================================
+          Perilaku: duit.js BAGIAN 7    Tampilan: duit.css BAGIAN 8 (dan 12 untuk popup)
+        -->
+        <section class="page" id="page-analysis">
+          <!--
+            JUDUL HALAMAN (hero).
+            GANTI TEKS : tulisan tombol kembali di <span>, judul di <h2>, dan kalimat di <p>.
+                          Kata di dalam <span class="rd-underline"> diberi garis bawah hijau.
+            JANGAN UBAH: data-go="..." pada tombol kembali (tujuan tombol).
+          -->
+          <div class="rd-hero rd-rise" style="--i: 0">
+            <div class="rd-hero-text">
+              <button class="rd-back" type="button" data-go="input">
+                <svg class="ico"><use href="#x-arrow-left" /></svg>
+                <span>Tahap 2 · Penilaian (SAW) </span>
+              </button>
+              <h2>Nilai setiap <span class="rd-underline">kebutuhan</span></h2>
+              <p>Beri skor 1–5 pada tiap kriteria sesuai kondisi Anda.</p>
+            </div>
+            <div class="rd-art">
+              <!--
+                GANTI GAMBAR : ubah nama file pada src="grafik.png" (simpan gambar baru di ).
+                PENJELASAN   : [LAPTOP / DESKTOP] gambar ini tampil. Ukuran slotnya: duit.css BAGIAN 6 (.rd-art).
+                               [HP] (lebar layar 760px ke bawah) gambar ini DISEMBUNYIKAN otomatis; aturannya di duit.css BAGIAN 13.
+              -->
+              <img src="1.png" alt="Ilustrasi" />
+            </div>
+          </div>
+
+          <!--
+            PANDUAN SKOR (kiri) dan KRITERIA PENILAIAN (kanan).
+            PENJELASAN : skala 1-5 di kiri dibuat otomatis dari SCALE (duit.js BAGIAN 1). Klik salah satu kartu kriteria
+                         di kanan -> skala di kiri berganti dan muncul tulisan "Selengkapnya" yang membuka popup
+                         (HTML popup: BAGIAN 11 file ini; perilaku: duit.js BAGIAN 7).
+            GANTI TEKS : "Panduan Skor" dan "Kriteria Penilaian". GANTI IKON: <use href="#x-bars" /> dan <use href="#x-target" />.
+            JANGAN UBAH: id="scaleGuide", "scaleFor", "scaleMore".
+          -->
+          <article class="rd-card rd-guide rd-rise" style="--i: 1">
+            <div>
+              <h3>
+                <svg class="ico"><use href="#x-bars" /></svg>Panduan Skor
+                <small class="rd-scale-for" id="scaleFor" hidden></small>
+                <button
+                  class="rd-more"
+                  id="scaleMore"
+                  type="button"
+                  aria-haspopup="dialog"
+                  hidden
+                >
+                  Selengkapnya
+                </button>
+              </h3>
+              <ul class="rd-scale" id="scaleGuide"></ul>
+            </div>
+            <div class="rd-guide-sep"></div>
+            <div>
+              <h3>
+                <svg class="ico"><use href="#x-target" /></svg>Kriteria
+                Penilaian
+              </h3>
+              <!--
+                KARTU KRITERIA C1-C4 (bisa diklik).
+                GANTI TEKS : kode di <b> dan nama di <span>; title="..." = tooltip saat kursor diarahkan ke kartu.
+                GANTI IKON : ubah nama setelah # pada <use href="#x-star" /> dst.
+                JANGAN UBAH: data-crit="C1".."C4" (harus sama dengan kunci CRIT_GUIDE di duit.js BAGIAN 1).
+              -->
+              <ul class="rd-crit">
+                <li
+                  title="Seberapa penting kebutuhan tersebut bagi kehidupan sehari-hari."
+                  data-crit="C1"
+                  role="button"
+                  tabindex="0"
+                  aria-pressed="false"
+                >
+                  <svg class="ico"><use href="#x-star" /></svg><b>C1</b
+                  ><span>Penting</span>
+                </li>
+                <li
+                  title="Seberapa besar akibat jika kebutuhan tidak dipenuhi."
+                  data-crit="C2"
+                  role="button"
+                  tabindex="0"
+                  aria-pressed="false"
+                >
+                  <svg class="ico"><use href="#x-bars" /></svg><b>C2</b
+                  ><span>Dampak</span>
+                </li>
+                <li
+                  title="Seberapa dekat kebutuhan harus segera dipenuhi."
+                  data-crit="C3"
+                  role="button"
+                  tabindex="0"
+                  aria-pressed="false"
+                >
+                  <svg class="ico"><use href="#x-clock" /></svg><b>C3</b
+                  ><span>Waktu</span>
+                </li>
+                <li
+                  title="Seberapa besar sifat wajib atau tanggung jawabnya."
+                  data-crit="C4"
+                  role="button"
+                  tabindex="0"
+                  aria-pressed="false"
+                >
+                  <svg class="ico"><use href="#x-credit-card" /></svg><b>C4</b
+                  ><span>Kewajiban</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!--
+            TABEL PENILAIAN ALTERNATIF. Baris tabel dibuat otomatis oleh duit.js (BAGIAN 7) sesuai kebutuhan yang dipilih.
+            GANTI TEKS : judul kartu dan judul kolom (C1 Penting, dst.).
+                          Tulisan "Bobot: 25% / kriteria" hanya teks; bila WEIGHTS di duit.js diubah, ubah juga tulisan ini.
+            JANGAN UBAH: id="scoringTable" dan id="scoreWarnings".
+          -->
+          <article class="rd-card rd-rise" style="--i: 2">
+            <header class="rd-card-head">
+              <span class="rd-card-ico"
+                ><svg class="ico"><use href="#x-layers" /></svg>
+              </span>
+              <h3>Penilaian Alternatif</h3>
+              <span class="rd-pill rd-pill-soft"
+                ><svg class="ico"><use href="#x-scale" /></svg>
+                <b>Bobot: 25% / kriteria</b></span
+              >
+            </header>
+
+            <div class="rd-table-wrap">
+              <table class="rd-table rd-score-table">
+                <thead>
+                  <tr>
+                    <th>Kebutuhan</th>
+                    <th>
+                      <span class="rd-th-code">C1</span><small>Penting</small>
+                    </th>
+                    <th>
+                      <span class="rd-th-code">C2</span><small>Dampak</small>
+                    </th>
+                    <th>
+                      <span class="rd-th-code">C3</span><small>Waktu</small>
+                    </th>
+                    <th>
+                      <span class="rd-th-code">C4</span><small>Kewajiban</small>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="scoringTable"></tbody>
+              </table>
+            </div>
+
+            <div class="warning-list" id="scoreWarnings"></div>
+          </article>
+
+          <!-- TOMBOL. GANTI TEKS: tulisan tombol. JANGAN UBAH id="calculateBtn" dan data-go. -->
+          <div class="form-actions rd-rise" style="--i: 3">
+            <button class="btn btn-outline" data-go="input" type="button">
+              ← Kembali
+            </button>
+            <button class="btn btn-primary" id="calculateBtn" type="button">
+              Hitung prioritas <span>→</span>
+            </button>
+          </div>
+        </section>
+
+        <!--
+          ==================================================================
+          BAGIAN 7 · TAHAP 3 · HASIL SAW
+          ==================================================================
+          Perilaku: duit.js BAGIAN 8    Tampilan: duit.css BAGIAN 9
+        -->
+        <section class="page" id="page-results">
+          <!--
+            JUDUL HALAMAN (hero).
+            GANTI TEKS : tulisan tombol kembali di <span>, judul di <h2>, dan kalimat di <p>.
+                          Kata di dalam <span class="rd-underline"> diberi garis bawah hijau.
+            JANGAN UBAH: data-go="..." pada tombol kembali (tujuan tombol).
+          -->
+          <div class="rd-hero rd-rise" style="--i: 0">
+            <div class="rd-hero-text">
+              <button class="rd-back" type="button" data-go="analysis">
+                <svg class="ico"><use href="#x-arrow-left" /></svg>
+                <span>Tahap 3 · Hasil Analisis</span>
+              </button>
+              <h2>Hasil Analisis <span class="rd-underline">SAW</span></h2>
+              <p>Nilai preferensi dan urutan prioritas setiap kebutuhan.</p>
+            </div>
+            <div class="rd-art">
+              <!--
+                GANTI GAMBAR (opsional): slot gambar masih kosong (tampil tulisan "Ruang gambar").
+                Untuk memasang gambar: HAPUS baris <span class="rd-art-hint">...</span> di bawah, lalu tulis:
+                    <img src="NAMA-FILE.png" alt="Ilustrasi" />
+                (simpan gambarnya di ). [LAPTOP / DESKTOP] gambar tampil; [HP] gambar disembunyikan otomatis.
+              -->
+              <img src="3.png" alt="Ilustrasi" />
+            </div>
+          </div>
+
+          <!--
+            HASIL SAW. Kotak "Prioritas Utama", grafik batang, dan tabel peringkat dibuat otomatis oleh duit.js (BAGIAN 8)
+            setelah tombol "Hitung prioritas" ditekan. Yang tertulis di sini hanya isi awal sebelum ada hasil.
+            GANTI TEKS : judul kartu dan teks awal. GANTI IKON: <use href="#x-trophy" />, <use href="#x-star" />, <use href="#x-layers" />.
+            JANGAN UBAH: id="resultSummary", "priorityChart", "resultTable".
+          -->
+          <div class="rd-split rd-split-3">
+            <div class="rd-stack">
+              <div
+                class="rd-card rd-top-card rd-rise"
+                style="--i: 1"
+                id="resultSummary"
+              >
+                <span class="rd-trophy"
+                  ><svg class="ico"><use href="#x-trophy" /></svg>
+                </span>
+                <div class="rd-top-info">
+                  <span>Prioritas Utama</span><strong>—</strong>
+                </div>
+                <span class="rd-pill"
+                  ><svg class="ico"><use href="#x-star" /></svg>
+                  <b>Peringkat 1</b></span
+                >
+              </div>
+
+              <article class="rd-card rd-rise" style="--i: 2">
+                <header class="rd-card-head">
+                  <span class="rd-card-ico"
+                    ><svg class="ico"><use href="#x-layers" /></svg>
+                  </span>
+                  <h3>Nilai Preferensi</h3>
+                </header>
+                <div class="rd-bars" id="priorityChart">
+                  <p class="rd-hint">
+                    Belum ada hasil. Hitung prioritas di Tahap 2.
+                  </p>
+                </div>
+              </article>
+            </div>
+
+            <article class="rd-card rd-rise" style="--i: 3">
+              <header class="rd-card-head">
+                <span class="rd-card-ico"
+                  ><svg class="ico"><use href="#x-layers" /></svg>
+                </span>
+                <h3>Peringkat Lengkap</h3>
+              </header>
+              <div class="rd-table-wrap">
+                <table class="rd-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 64px">#</th>
+                      <th>Kebutuhan</th>
+                      <th class="rd-num">Nilai</th>
+                    </tr>
+                  </thead>
+                  <tbody id="resultTable">
+                    <tr>
+                      <td colspan="3" class="rd-muted-cell">
+                        Belum ada hasil. Hitung prioritas di Tahap 2.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+
+          <!-- TOMBOL. GANTI TEKS: tulisan tombol. JANGAN UBAH data-go. -->
+          <div class="form-actions rd-rise" style="--i: 4">
+            <button class="btn btn-outline" data-go="analysis" type="button">
+              ← Kembali
+            </button>
+            <button class="btn btn-primary" data-go="allocation" type="button">
+              Lihat alokasi dana <span>→</span>
+            </button>
+          </div>
+        </section>
+
+        <!--
+          ==================================================================
+          BAGIAN 8 · TAHAP 4 · ALOKASI DANA
+          ==================================================================
+          Perilaku: duit.js BAGIAN 9    Tampilan: duit.css BAGIAN 10
+        -->
+        <section class="page" id="page-allocation">
+          <!--
+            JUDUL HALAMAN (hero).
+            GANTI TEKS : tulisan tombol kembali di <span>, judul di <h2>, dan kalimat di <p>.
+                          Kata di dalam <span class="rd-underline"> diberi garis bawah hijau.
+            JANGAN UBAH: data-go="..." pada tombol kembali (tujuan tombol).
+          -->
+          <div class="rd-hero rd-rise" style="--i: 0">
+            <div class="rd-hero-text">
+              <button class="rd-back" type="button" data-go="results">
+                <svg class="ico"><use href="#x-arrow-left" /></svg>
+                <span>Tahap 4 · Alokasi Dana</span>
+              </button>
+              <h2><span class="rd-underline">Alokasi</span> Dana</h2>
+              <p>Pembagian dana berdasarkan hasil prioritas SAW.</p>
+            </div>
+            <div class="rd-art">
+              <!--
+                GANTI GAMBAR (opsional): slot gambar masih kosong (tampil tulisan "Ruang gambar").
+                Untuk memasang gambar: HAPUS baris <span class="rd-art-hint">...</span> di bawah, lalu tulis:
+                    <img src="NAMA-FILE.png" alt="Ilustrasi" />
+                (simpan gambarnya di ). [LAPTOP / DESKTOP] gambar tampil; [HP] gambar disembunyikan otomatis.
+              -->
+              <img src="4.png" alt="Ilustrasi" />
+            </div>
+          </div>
+
+          <!--
+            ALOKASI DANA. Tiga kartu ringkasan, grafik donat, legenda, tabel rincian, dan kesimpulan dibuat otomatis
+            oleh duit.js (BAGIAN 9). Yang tertulis di sini hanya isi awal.
+            GANTI TEKS : judul kartu dan teks awal. GANTI IKON: <use href="#x-wallet" />, <use href="#x-pie" />, <use href="#x-coins" />, <use href="#x-bulb" />.
+            JANGAN UBAH: semua id di halaman ini (allocationSummary, allocationDonut, allocationDonutTotal,
+                          allocationLegend, allocationTable, allocationNote).
+          -->
+          <div class="rd-kpis" id="allocationSummary">
+            <article class="rd-card rd-kpi rd-rise" style="--i: 1">
+              <span class="rd-kpi-ico"
+                ><svg class="ico"><use href="#x-wallet" /></svg>
+              </span>
+              <div class="rd-kpi-body">
+                <span>Dana Operasional</span><strong>Rp0</strong>
+              </div>
+            </article>
+            <article class="rd-card rd-kpi rd-rise" style="--i: 2">
+              <span class="rd-kpi-ico"
+                ><svg class="ico"><use href="#x-pie" /></svg>
+              </span>
+              <div class="rd-kpi-body">
+                <span>Jumlah Kebutuhan</span><strong>0 kebutuhan</strong>
+              </div>
+            </article>
+            <article class="rd-card rd-kpi rd-rise" style="--i: 3">
+              <span class="rd-kpi-ico amber"
+                ><svg class="ico"><use href="#x-coins" /></svg>
+              </span>
+              <div class="rd-kpi-body">
+                <span>Alokasi per Kebutuhan</span
+                ><small>Sesuai urutan prioritas</small>
+              </div>
+            </article>
+          </div>
+
+          <div class="rd-split rd-split-4">
+            <article class="rd-card rd-rise" style="--i: 4">
+              <header class="rd-card-head">
+                <span class="rd-card-ico"
+                  ><svg class="ico"><use href="#x-pie" /></svg>
+                </span>
+                <h3>Ringkasan Alokasi</h3>
+              </header>
+              <div class="rd-alloc-visual">
+                <div class="rd-donut" id="allocationDonut">
+                  <div class="rd-donut-center">
+                    <svg class="ico"><use href="#x-wallet" /></svg>
+                    <strong id="allocationDonutTotal">Rp0</strong>
+                  </div>
+                </div>
+                <div class="rd-legend" id="allocationLegend">
+                  <p class="rd-hint">
+                    Belum ada hasil. Hitung prioritas di Tahap 2.
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article class="rd-card rd-rise" style="--i: 5">
+              <header class="rd-card-head">
+                <span class="rd-card-ico"
+                  ><svg class="ico"><use href="#x-list" /></svg>
+                </span>
+                <h3>Rincian Alokasi Dana</h3>
+              </header>
+              <div class="rd-table-wrap">
+                <table class="rd-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 56px">#</th>
+                      <th>Kebutuhan</th>
+                      <th>Persentase</th>
+                      <th class="rd-num">Alokasi Dana</th>
+                    </tr>
+                  </thead>
+                  <tbody id="allocationTable">
+                    <tr>
+                      <td colspan="4" class="rd-muted-cell">
+                        Belum ada hasil. Hitung prioritas di Tahap 2.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+
+          <div class="rd-conclusion rd-rise" style="--i: 6">
+            <svg class="ico"><use href="#x-bulb" /></svg>
+            <p id="allocationNote">
+              <b>Kesimpulan:</b> hasil alokasi akan tampil setelah prioritas
+              dihitung.
+            </p>
+          </div>
+
+          <!-- TOMBOL. GANTI TEKS: tulisan tombol. JANGAN UBAH id="saveAnalysis". -->
+          <div class="form-actions rd-rise" style="--i: 7">
+            <button class="btn btn-outline" data-go="results" type="button">
+              ← Kembali
+            </button>
+            <button class="btn btn-primary" id="saveAnalysis" type="button">
+              Simpan analisis <span>✓</span>
+            </button>
+          </div>
+        </section>
+
+        <!--
+          ==================================================================
+          BAGIAN 9 · RIWAYAT
+          ==================================================================
+          Perilaku: duit.js BAGIAN 10    Tampilan: duit.css BAGIAN 11
+        -->
+        <section class="page" id="page-history">
+          <!--
+            JUDUL HALAMAN (hero).
+            GANTI TEKS : tulisan tombol kembali di <span>, judul di <h2>, dan kalimat di <p>.
+                          Kata di dalam <span class="rd-underline"> diberi garis bawah hijau.
+            JANGAN UBAH: data-go="..." pada tombol kembali (tujuan tombol).
+          -->
+          <div class="rd-hero rd-rise" style="--i: 0">
+            <div class="rd-hero-text">
+              <button class="rd-back" type="button" data-go="dashboard">
+                <svg class="ico"><use href="#x-arrow-left" /></svg>
+                <span>Riwayat Analisis</span>
+              </button>
+              <h2><span class="rd-underline">Riwayat</span> Analisis</h2>
+              <p>Daftar dan ringkasan analisis yang telah Anda simpan.</p>
+            </div>
+            <div class="rd-art">
+              <!--
+                GANTI GAMBAR (opsional): slot gambar masih kosong (tampil tulisan "Ruang gambar").
+                Untuk memasang gambar: HAPUS baris <span class="rd-art-hint">...</span> di bawah, lalu tulis:
+                    <img src="NAMA-FILE.png" alt="Ilustrasi" />
+                (simpan gambarnya di ). [LAPTOP / DESKTOP] gambar tampil; [HP] gambar disembunyikan otomatis.
+              -->
+              <img src="5.png" alt="Ilustrasi" />
+            </div>
+          </div>
+
+          <!--
+            TIGA KARTU STATISTIK riwayat (angka terisi otomatis).
+            GANTI TEKS : judul kartu di <span>. GANTI IKON: <use href="#x-layers" />, <use href="#x-trophy" />, <use href="#x-wallet" />.
+            JANGAN UBAH: id="histTotal", "histTop", "histFunds".
+          -->
+          <div class="rd-stats">
+            <article class="rd-card rd-kpi rd-rise" style="--i: 1">
+              <span class="rd-kpi-ico"
+                ><svg class="ico"><use href="#x-layers" /></svg>
+              </span>
+              <div class="rd-kpi-body">
+                <span>Total Analisis</span><strong id="histTotal">0</strong>
+              </div>
+            </article>
+            <article class="rd-card rd-kpi rd-rise" style="--i: 2">
+              <span class="rd-kpi-ico amber"
+                ><svg class="ico"><use href="#x-trophy" /></svg>
+              </span>
+              <div class="rd-kpi-body">
+                <span>Prioritas Teratas</span
+                ><strong class="rd-kpi-text" id="histTop">—</strong>
+              </div>
+            </article>
+            <article class="rd-card rd-kpi rd-rise" style="--i: 3">
+              <span class="rd-kpi-ico"
+                ><svg class="ico"><use href="#x-wallet" /></svg>
+              </span>
+              <div class="rd-kpi-body">
+                <span>Total Dana Dianalisis</span
+                ><strong id="histFunds">Rp0</strong>
+              </div>
+            </article>
+          </div>
+
+          <!--
+            KOLOM CARI, FILTER PERIODE, URUTAN, dan tombol muat ulang.
+            GANTI TEKS : placeholder pencarian dan tulisan tiap <option>.
+            JANGAN UBAH: id (historySearch, historyPeriod, historySort, refreshHistory) dan value="..." pada <option>
+                          (nilai itu dibaca duit.js BAGIAN 10).
+          -->
+          <div class="rd-toolbar rd-rise" style="--i: 4">
+            <label class="rd-search">
+              <svg class="ico"><use href="#x-search" /></svg>
+              <input
+                id="historySearch"
+                type="text"
+                placeholder="Cari riwayat analisis..."
+                aria-label="Cari riwayat analisis"
+                autocomplete="off"
+              />
+            </label>
+            <div class="rd-selectbox">
+              <svg class="ico lead"><use href="#x-calendar" /></svg>
+              <select id="historyPeriod" aria-label="Filter periode">
+                <option value="all">Semua Periode</option>
+                <option value="7">7 hari terakhir</option>
+                <option value="30">30 hari terakhir</option>
+                <option value="month">Bulan ini</option>
+                <option value="year">Tahun ini</option>
+              </select>
+              <svg class="ico chev"><use href="#x-chevron-down" /></svg>
+            </div>
+            <div class="rd-selectbox">
+              <svg class="ico lead"><use href="#x-layers" /></svg>
+              <select id="historySort" aria-label="Urutkan riwayat">
+                <option value="newest">Urutkan: Terbaru</option>
+                <option value="oldest">Urutkan: Terlama</option>
+                <option value="highest">Urutkan: Dana terbesar</option>
+                <option value="lowest">Urutkan: Dana terkecil</option>
+              </select>
+              <svg class="ico chev"><use href="#x-chevron-down" /></svg>
+            </div>
+            <button
+              class="rd-icon-btn"
+              id="refreshHistory"
+              type="button"
+              aria-label="Muat ulang riwayat"
+              title="Muat ulang"
+            >
+              <svg class="ico"><use href="#x-refresh" /></svg>
+            </button>
+          </div>
+
+          <!-- DAFTAR RIWAYAT. Baris-barisnya dibuat otomatis oleh duit.js (BAGIAN 10). JANGAN UBAH id="historyList". -->
+          <div class="rd-history" id="historyList"></div>
+
+          <!-- KETERANGAN JUMLAH & NOMOR HALAMAN (otomatis). JANGAN UBAH id="historyInfo" dan id="historyPager". -->
+          <div class="rd-pager-bar">
+            <span class="rd-pager-info" id="historyInfo">0 analisis</span>
+            <div class="rd-pager" id="historyPager"></div>
+          </div>
+        </section>
+
+        <!--
+          ==================================================================
+          BAGIAN 10 · POPUP DETAIL RIWAYAT
+          ==================================================================
+          Perilaku: duit.js BAGIAN 10    Tampilan: duit.css BAGIAN 11
+        -->
+        <!--
+          POPUP DETAIL. Muncul saat tombol "Detail" pada baris riwayat ditekan; isi tabelnya dibuat otomatis (id="detailBody").
+          Ditutup oleh ikon x, klik area gelap di luar kotak, tombol "Tutup", atau tombol Escape.
+          GANTI TEKS : tulisan tombol "Tutup" dan "Cetak laporan". GANTI IKON: <use href="#x-x" />.
+          JANGAN UBAH: id (detailModal, detailBody, detailReport) dan atribut data-close-modal.
+        -->
+        <div class="rd-modal" id="detailModal" hidden>
+          <div class="rd-modal-backdrop" data-close-modal></div>
+          <div
+            class="rd-modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="detailTitle"
+          >
+            <button
+              class="rd-modal-x"
+              type="button"
+              data-close-modal
+              aria-label="Tutup"
+            >
+              <svg class="ico"><use href="#x-x" /></svg>
+            </button>
+            <div id="detailBody"></div>
+            <div class="rd-modal-actions">
+              <button class="btn btn-outline" type="button" data-close-modal>
+                Tutup
+              </button>
+              <button class="btn btn-primary" type="button" id="detailReport">
+                Cetak laporan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!--
+          ==================================================================
+          BAGIAN 11 · POPUP PANDUAN SKOR (Selengkapnya)
+          ==================================================================
+          Perilaku: duit.js BAGIAN 7    Tampilan: duit.css BAGIAN 12
+        -->
+        <!--
+          POPUP PANDUAN SKOR. Muncul saat "Selengkapnya" (kanan atas kotak Panduan Skor) ditekan.
+          Judul, penjelasan, tabel skala 1-5, dan kotak info dibuat otomatis (id="critBody") dari CRIT_GUIDE di duit.js
+          (BAGIAN 1), jadi teksnya diubah di sana, bukan di sini.
+          GANTI IKON : ikon pada tombol tutup <use href="#x-x" />. JANGAN UBAH: id dan atribut data-close-crit.
+        -->
+        <div class="rd-modal" id="critModal" hidden>
+          <div class="rd-modal-backdrop" data-close-crit></div>
+          <div
+            class="rd-crit-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="critTitle"
+          >
+            <button
+              class="rd-crit-x"
+              id="critClose"
+              type="button"
+              data-close-crit
+              aria-label="Tutup"
+            >
+              <svg class="ico"><use href="#x-x" /></svg>
+            </button>
+            <div id="critBody"></div>
+          </div>
+        </div>
+
+        <!--
+          ==================================================================
+          BAGIAN 12 · FOOTER, NOTIFIKASI, DAN SCRIPT
+          ==================================================================
+          FOOTER. GANTI NAMA/TEKS: tulisan hak cipta dan kalimat penutup.
+        -->
+        <footer class="main-footer">
+          <span>© 2026 DuitDulu. Alat bantu keputusan keuangan.</span>
+          <span>Kelola kebutuhan dengan lebih bijak.</span>
+        </footer>
+      </main>
+    </div>
+
+    <!--
+      NOTIFIKASI kecil di pojok kanan bawah; teksnya diisi duit.js lewat toast("...").
+      JANGAN UBAH id="toast".
+    -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!--
+      FILE LOGIKA: duit.js (disusun berurutan BAGIAN 1 sampai 11, lihat daftar isi di bagian atas file itu).
+      Harus dimuat PALING AKHIR (setelah semua isi halaman di atas).
+    -->
+    <script src="config.js"></script>
+    <script src="motion-core.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="store.js"></script>
+    <script src="duit.js"></script>
+    <script src="duit-motion.js"></script>
+  </body>
+</html>

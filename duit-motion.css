@@ -1,0 +1,52 @@
+/* ==================================================================
+   DUITDULU - ANIMASI (duit-motion.css)  ·  dipasangkan dengan duit-motion.js
+   File ini hanya MENAMBAH animasi di atas duit.css; hapus file ini bila ingin kembali ke tampilan lama.
+   ================================================================== */
+:root { --mspring: cubic-bezier(.34, 1.56, .64, 1); --mout: cubic-bezier(.22, .8, .3, 1); }
+
+/* Perpindahan halaman ditangani JS (arah kiri/kanan + bertahap), jadi animasi lama dimatikan */
+.page { animation: none; }
+.main-area { overflow-x: clip; }
+
+/* ---------- Sidebar: penanda aktif yang meluncur ---------- */
+.nav-list { position: relative; }
+.nav-pill {
+  position: absolute; left: 0; top: 0; width: 100%; height: 45px; z-index: 0;
+  border-radius: 10px; pointer-events: none; opacity: 0; will-change: transform;
+  background: linear-gradient(110deg, #087346, #116c47);
+  box-shadow: 0 6px 14px rgba(8, 115, 70, .2);
+}
+.nav-list.has-pill .nav-pill { opacity: 1; }
+.nav-list.has-pill .nav-item { position: relative; z-index: 1; }
+.nav-list.has-pill .nav-item.active,
+.nav-list.has-pill .nav-item.active:hover { background: transparent; box-shadow: none; color: #fff; }
+.nav-item { transition: background .25s, color .4s, transform .45s var(--mspring); }
+.nav-item:active { transform: scale(.96); }
+.nav-item .ico { transition: transform .35s var(--mspring); }
+.nav-item:hover .ico { transform: translateX(2px) scale(1.1); }
+.nav-item.logout:hover { background: #fdecea; color: #b4412f; }
+.nav-item.logout:hover .ico { transform: translateX(3px); }
+
+/* ---------- Tombol & kartu pilihan ---------- */
+.btn { transition: transform .22s var(--mspring), box-shadow .22s, background .2s, color .2s; }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(1px) scale(.97); }
+.alternative-card { will-change: transform; }
+
+/* ---------- Belum memenuhi syarat: sorot merah ---------- */
+.is-invalid { position: relative; }
+.rd-field.is-invalid .rd-money,
+.is-invalid#alternativeGrid,
+#saveAnalysis.is-invalid { outline: 2px solid rgba(180, 65, 47, .6); outline-offset: 3px; border-radius: 12px; }
+.rd-field.is-invalid label { color: #b4412f; transition: color .2s; }
+
+/* ---------- Notifikasi ---------- */
+.toast { transform: translateY(24px) scale(.96); transition: opacity .45s, transform .8s var(--mspring); }
+.toast.show { transform: none; }
+
+/* ---------- Konfeti kecil saat berhasil menyimpan ---------- */
+.confetti { position: fixed; z-index: 120; width: 9px; height: 9px; border-radius: 50%; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not(.force-motion) .nav-item, :root:not(.force-motion) .nav-item .ico, :root:not(.force-motion) .btn, :root:not(.force-motion) .toast { transition-duration: .01ms !important; }
+}

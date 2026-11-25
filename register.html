@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Daftar · Duit Dulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<noscript><style>.rv{opacity:1}.g{opacity:1}</style></noscript>
+</head>
+<body class="page-register">
+<main class="page">
+
+  <section class="stage" id="stage" aria-label="Duit Dulu">
+    <i class="shape s1"></i><i class="shape s2"></i><i class="shape s3"></i><i class="shape s4"></i>
+    <div class="stage-inner">
+      <div class="logo-float">
+        <div class="logo-pose" id="logoPose">
+          <div class="logo-act" id="logoAct">
+            <div class="logo" id="logo" role="img" aria-label="Duit Dulu">
+              <img class="g" src="symbol.png" alt="" draggable="false" style="--l:0.000%;--w:21.516%">
+              <img class="g" src="u1.png" alt="" draggable="false" style="--l:21.899%;--w:13.017%">
+              <img class="g" src="i.png" alt="" draggable="false" style="--l:35.758%;--w:5.436%">
+              <img class="g" src="t.png" alt="" draggable="false" style="--l:41.271%;--w:9.342%">
+              <img class="g" src="D.png" alt="" draggable="false" style="--l:51.225%;--w:15.620%">
+              <img class="g" src="u2.png" alt="" draggable="false" style="--l:67.075%;--w:12.940%">
+              <img class="g" src="l.png" alt="" draggable="false" style="--l:80.704%;--w:5.054%">
+              <img class="g" src="u3.png" alt="" draggable="false" style="--l:86.677%;--w:13.323%">
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="headline rv" style="--i:0">Prioritaskan yang penting.</p>
+      <p class="desc rv" style="--i:1">Bantu tentukan prioritas kebutuhan dengan lebih terarah.</p>
+    </div>
+    <div class="m-actions">
+      <button type="button" id="mOpen" class="btn rv" style="--i:2">Buat akun baru</button>
+      <a class="btn btn-ghost rv" style="--i:3" href="index.html?sheet=1">Saya sudah punya akun</a>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="card" id="card">
+      <button type="button" class="grab" id="grab" aria-label="Tutup form"><i></i></button>
+      <img class="mini rv" style="--i:0" src="duitdulu.png" alt="Duit Dulu">
+      <h1 class="rv" style="--i:1">Buat akun baru</h1>
+      <p class="sub rv" style="--i:2">Daftar untuk mulai menentukan prioritas.</p>
+
+      <form id="registerForm" data-mode="register" novalidate>
+        <div class="field rv" style="--i:3">
+          <label for="name">Nama lengkap</label>
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="Nama Anda" required>
+        </div>
+        <div class="field rv" style="--i:4">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="nama@email.com" required>
+        </div>
+        <div class="field rv" style="--i:5">
+          <label for="password">Kata sandi</label>
+          <div class="pw">
+            <input id="password" name="password" type="password" data-pw autocomplete="new-password" placeholder="Minimal 6 karakter" required>
+            <button type="button" id="toggle" class="toggle" aria-pressed="false" aria-label="Tampilkan kata sandi">Tampilkan</button>
+          </div>
+        </div>
+        <div class="field rv" style="--i:6">
+          <label for="confirm">Ulangi kata sandi</label>
+          <input id="confirm" name="confirm" type="password" data-pw autocomplete="new-password" placeholder="Ketik ulang kata sandi" required>
+        </div>
+        <p class="error" id="formError" role="alert"></p>
+        <button type="submit" id="submit" class="btn rv" style="--i:7"><span class="btn-label">Daftar</span><span class="spinner" aria-hidden="true"></span></button>
+      </form>
+
+      <p class="alt rv" style="--i:8">Sudah punya akun? <a href="index.html?sheet=1">Masuk</a></p>
+    </div>
+  </section>
+
+</main>
+
+<div class="leave" id="leave" hidden>
+  <div class="leave-box">
+    <p class="leave-title">Akun berhasil dibuat</p>
+    <p class="leave-note" id="leaveNote"></p>
+    <button type="button" id="back" class="back">Kembali ke halaman login</button>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="motion-core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="store.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
