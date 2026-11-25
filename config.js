@@ -13,8 +13,8 @@
                    false = hormati pengaturan perangkat (animasi mati bila pengguna memintanya).
 */
 window.DUITDULU_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: "",
+  SUPABASE_URL: "https://dlymjnbjuzdlmwxgewyo.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_GvroBwFDiEoucDwxXNzhxg_C58iFhiF",
   MOTION_SPEED: 1.6,
   FORCE_MOTION: true,
 };
